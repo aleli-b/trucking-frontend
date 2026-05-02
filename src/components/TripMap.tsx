@@ -8,6 +8,7 @@ import {
   useMap,
 } from 'react-leaflet'
 import L from 'leaflet'
+import { Box, useTheme } from '@mui/material'
 import type { GeoJSONLineString, TripStop } from '../types/tripPlan'
 import { lineStringToLeafletLatLngs } from '../lib/coords'
 
@@ -72,6 +73,9 @@ type TripMapProps = {
 }
 
 export function TripMap({ geometry, stops }: TripMapProps) {
+  const theme = useTheme()
+  const routeColor = theme.palette.primary.main
+
   const latLngs = useMemo(
     () => lineStringToLeafletLatLngs(geometry.coordinates),
     [geometry.coordinates],
@@ -85,12 +89,22 @@ export function TripMap({ geometry, stops }: TripMapProps) {
   const center = latLngs[0] ?? [39.8283, -98.5795]
 
   return (
-    <div className="trip-map-wrap">
+    <Box
+      className="leaflet-map-panel no-print"
+      sx={{
+        height: { xs: 360, md: 480 },
+        width: 1,
+        borderRadius: 1,
+        overflow: 'hidden',
+        border: 1,
+        borderColor: 'divider',
+      }}
+    >
       <MapContainer
-        className="trip-map"
         center={center}
         zoom={5}
         scrollWheelZoom
+        style={{ height: '100%', width: '100%', zIndex: 0 }}
       >
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
@@ -99,7 +113,7 @@ export function TripMap({ geometry, stops }: TripMapProps) {
         <Polyline
           positions={latLngs}
           pathOptions={{
-            color: '#6366f1',
+            color: routeColor,
             weight: 5,
             opacity: 0.9,
             lineCap: 'round',
@@ -130,6 +144,6 @@ export function TripMap({ geometry, stops }: TripMapProps) {
         })}
         <FitBounds positions={allPositions} />
       </MapContainer>
-    </div>
+    </Box>
   )
 }

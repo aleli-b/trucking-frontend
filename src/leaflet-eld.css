@@ -1,0 +1,89 @@
+/* Leaflet map fills its Material panel */
+.leaflet-map-panel .leaflet-container {
+  height: 100%;
+  width: 100%;
+  font-family: inherit;
+}
+
+/* ELD SVG chrome (colors follow :root vars in index.css) */
+.eld-svg .eld-chart-bg {
+  fill: var(--eld-chart-bg);
+  stroke: var(--eld-frame);
+  stroke-width: 1;
+}
+
+.eld-svg .eld-row-label {
+  fill: var(--eld-grid-text-strong);
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.eld-svg .eld-hline {
+  stroke: var(--eld-grid-line-major);
+  stroke-width: 1;
+}
+
+.eld-svg .eld-frame {
+  stroke: var(--eld-frame);
+  stroke-width: 1.5;
+}
+
+.eld-svg .eld-vline {
+  stroke: var(--eld-grid-line);
+  stroke-width: 0.5;
+}
+
+.eld-svg .eld-vline--major {
+  stroke: var(--eld-grid-line-major);
+  stroke-width: 1;
+}
+
+.eld-svg .eld-hour-label {
+  fill: var(--eld-grid-text);
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.eld-seg {
+  stroke: var(--eld-seg-stroke);
+  stroke-width: 0.65;
+}
+
+.eld-seg--off {
+  fill: var(--eld-off);
+}
+
+.eld-seg--sb {
+  fill: var(--eld-sb);
+}
+
+.eld-seg--d {
+  fill: var(--eld-d);
+}
+
+.eld-seg--on {
+  fill: var(--eld-on);
+}
+
+.eld-seg--default {
+  fill: var(--eld-default);
+}
+
+@media print {
+  .no-print {
+    display: none !important;
+  }
+
+  .print-logs {
+    box-shadow: none !important;
+    border: 1px solid #000 !important;
+  }
+
+  .eld-svg .eld-chart-bg {
+    fill: #fff;
+  }
+
+  .eld-seg {
+    stroke: #111;
+  }
+}

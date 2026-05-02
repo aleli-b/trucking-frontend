@@ -1,3 +1,4 @@
+import { Typography } from '@mui/material'
 import type { DailyLogDay, TimelineDuty } from '../types/tripPlan'
 
 const ROW_LABELS = ['Off duty', 'Sleeper berth', 'Driving', 'On duty (not driving)'] as const
@@ -57,10 +58,10 @@ export function DailyLogGrid({ day }: DailyLogGridProps) {
   const hours = Array.from({ length: 25 }, (_, h) => h)
 
   return (
-    <figure className="daily-log-grid">
-      <figcaption className="daily-log-caption">
+    <figure className="daily-log-grid" style={{ margin: 0 }}>
+      <Typography variant="subtitle2" component="figcaption" sx={{ mb: 1, fontWeight: 700 }}>
         Driver&apos;s daily log — {day.date}
-      </figcaption>
+      </Typography>
       <svg
         className="eld-svg"
         viewBox={`0 0 ${W} ${H}`}

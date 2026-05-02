@@ -1,4 +1,5 @@
 import { useCallback, useState, type FormEvent } from 'react'
+import { Box, Button, Divider, Stack, TextField, Typography } from '@mui/material'
 import type { TripPlanRequest } from '../types/tripPlan'
 
 const defaultBody: TripPlanRequest = {
@@ -48,65 +49,92 @@ export function TripPlannerForm({ onSubmit, loading }: Props) {
   }
 
   return (
-    <form className="trip-form" onSubmit={handleSubmit}>
-      <fieldset>
-        <legend>Locations (WGS‑84)</legend>
-        {(['current', 'pickup', 'dropoff'] as const).map((key) => (
-          <div className="trip-form-row" key={key}>
-            <span className="trip-form-label">{key}</span>
-            <label>
-              lat
-              <input
-                inputMode="decimal"
-                value={String(body[key].lat)}
-                onChange={(e) => setPoint(key, 'lat', e.target.value)}
-              />
-            </label>
-            <label>
-              lon
-              <input
-                inputMode="decimal"
-                value={String(body[key].lon)}
-                onChange={(e) => setPoint(key, 'lon', e.target.value)}
-              />
-            </label>
-          </div>
-        ))}
-      </fieldset>
-      <label className="trip-form-block">
-        Cycle used (hours, 0–70)
-        <input
+    <Box component="form" onSubmit={handleSubmit} noValidate>
+      <Stack spacing={2}>
+        <Box>
+          <Typography variant="subtitle2" color="text.secondary" sx={{ mb: 1.5, fontWeight: 700 }}>
+            Locations (WGS‑84)
+          </Typography>
+          <Stack spacing={1.5}>
+            {(['current', 'pickup', 'dropoff'] as const).map((key) => (
+              <Box
+                key={key}
+                sx={{
+                  display: 'flex',
+                  flexDirection: { xs: 'column', sm: 'row' },
+                  gap: 1,
+                  alignItems: { sm: 'flex-start' },
+                }}
+              >
+                <Typography
+                  variant="caption"
+                  sx={{
+                    minWidth: { sm: 72 },
+                    pt: { sm: 1 },
+                    fontWeight: 700,
+                    textTransform: 'capitalize',
+                    color: 'text.primary',
+                  }}
+                >
+                  {key}
+                </Typography>
+                <TextField
+                  label="Latitude"
+                  size="small"
+                  type="text"
+                  inputMode="decimal"
+                  fullWidth
+                  value={String(body[key].lat)}
+                  onChange={(e) => setPoint(key, 'lat', e.target.value)}
+                />
+                <TextField
+                  label="Longitude"
+                  size="small"
+                  type="text"
+                  inputMode="decimal"
+                  fullWidth
+                  value={String(body[key].lon)}
+                  onChange={(e) => setPoint(key, 'lon', e.target.value)}
+                />
+              </Box>
+            ))}
+          </Stack>
+        </Box>
+
+        <Divider />
+
+        <TextField
+          label="Cycle used (hours, 0–70)"
           type="number"
-          min={0}
-          max={70}
-          step={0.25}
+          size="small"
+          fullWidth
+          slotProps={{ htmlInput: { min: 0, max: 70, step: 0.25 } }}
           value={body.cycle_used_hours}
           onChange={(e) =>
             setBody((b) => ({ ...b, cycle_used_hours: Number(e.target.value) }))
           }
         />
-      </label>
-      <label className="trip-form-block">
-        Trip start (ISO‑8601 UTC, optional)
-        <input
-          type="text"
+        <TextField
+          label="Trip start (ISO‑8601 UTC, optional)"
+          size="small"
+          fullWidth
           placeholder="2026-05-02T14:00:00Z"
           value={body.trip_start ?? ''}
           onChange={(e) => setBody((b) => ({ ...b, trip_start: e.target.value }))}
         />
-      </label>
-      <label className="trip-form-block">
-        Log timezone (IANA, optional)
-        <input
-          type="text"
+        <TextField
+          label="Log timezone (IANA, optional)"
+          size="small"
+          fullWidth
           placeholder="America/Chicago"
           value={body.log_timezone ?? ''}
           onChange={(e) => setBody((b) => ({ ...b, log_timezone: e.target.value }))}
         />
-      </label>
-      <button type="submit" className="trip-form-submit" disabled={loading}>
-        {loading ? 'Planning…' : 'Plan trip'}
-      </button>
-    </form>
+
+        <Button type="submit" variant="contained" size="large" fullWidth disabled={loading}>
+          {loading ? 'Planning…' : 'Plan trip'}
+        </Button>
+      </Stack>
+    </Box>
   )
 }

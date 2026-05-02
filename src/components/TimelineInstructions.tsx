@@ -1,3 +1,5 @@
+import FiberManualRecord from '@mui/icons-material/FiberManualRecord'
+import { Box, List, ListItem, ListItemIcon, ListItemText, Typography } from '@mui/material'
 import type { TimelineEntry } from '../types/tripPlan'
 
 function formatRange(
@@ -52,23 +54,47 @@ type Props = {
 
 export function TimelineInstructions({ timeline, logTimezone }: Props) {
   return (
-    <ul className="timeline-instructions">
+    <List disablePadding>
       {timeline.map((t, i) => {
         const { line, duration } = formatRange(t.start, t.end, logTimezone)
         return (
-          <li key={`${t.start}-${i}`}>
-            <span className="ti-duty">{dutyWord(t.duty)}</span>
-            <span className="ti-label"> — {humanLabel(t.label)}</span>
-            <div className="ti-meta">
-              {line}
-              <span className="ti-dur"> ({duration})</span>
-            </div>
-            {typeof t.distance_m === 'number' && t.duty === 'D' ? (
-              <div className="ti-dist">{(t.distance_m / 1609.34).toFixed(1)} mi this slice</div>
-            ) : null}
-          </li>
+          <ListItem key={`${t.start}-${i}`} sx={{ py: 1.25, px: 0, alignItems: 'flex-start' }}>
+            <ListItemIcon sx={{ minWidth: 32, mt: 0.35 }}>
+              <FiberManualRecord sx={{ fontSize: 12, color: 'primary.main' }} />
+            </ListItemIcon>
+            <ListItemText
+              disableTypography
+              primary={
+                <Box>
+                  <Typography variant="body1" sx={{ fontWeight: 700 }}>
+                    {dutyWord(t.duty)}
+                    <Typography component="span" variant="body1" color="text.secondary" sx={{ fontWeight: 500 }}>
+                      {' '}
+                      — {humanLabel(t.label)}
+                    </Typography>
+                  </Typography>
+                  <Typography
+                    variant="body2"
+                    sx={{ mt: 0.5, fontVariantNumeric: 'tabular-nums' }}
+                    color="text.primary"
+                  >
+                    {line}
+                    <Typography component="span" variant="body2" color="text.secondary" sx={{ fontWeight: 600 }}>
+                      {' '}
+                      ({duration})
+                    </Typography>
+                  </Typography>
+                  {typeof t.distance_m === 'number' && t.duty === 'D' ? (
+                    <Typography variant="caption" color="secondary" sx={{ display: 'block', mt: 0.5, fontWeight: 600 }}>
+                      {(t.distance_m / 1609.34).toFixed(1)} mi this slice
+                    </Typography>
+                  ) : null}
+                </Box>
+              }
+            />
+          </ListItem>
         )
       })}
-    </ul>
+    </List>
   )
 }
